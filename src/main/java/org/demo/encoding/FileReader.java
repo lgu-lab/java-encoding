@@ -11,17 +11,19 @@ import java.util.List;
 
 public class FileReader {
 
-	public List<String> readFile(String filePath) {
+	public List<String> readAllLines(String filePath) {
 
-		Path path = Paths.get(filePath);
-		try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-			return readLines(br);
+		Path path = Paths.get(filePath); // Paths : "nio" since Java 1.7
+		try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) { // Files & StandardCharsets :
+																							// "nio" since Java 1.7
+			return readAllLines(br);
 		} catch (IOException e) {
-			return null ;
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	private List<String> readLines(BufferedReader br) throws IOException {
+	private List<String> readAllLines(BufferedReader br) throws IOException {
 		List<String> lines = new LinkedList<>();
 		String line;
 		while ((line = br.readLine()) != null) {
@@ -29,4 +31,15 @@ public class FileReader {
 		}
 		return lines;
 	}
+
+	public String readAllContentInString(String filePath) {
+		try {
+			byte[] bytesFromFile = Files.readAllBytes(Paths.get(filePath));
+			return new String(bytesFromFile, StandardCharsets.UTF_8); // UTF-8 = charset to be used to decode the bytes
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }
